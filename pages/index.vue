@@ -1,29 +1,13 @@
 <template>
   <div class="container">
     <div>
-      <Logo />
-      <h1 class="title">
-        tt2nuxt
-      </h1>
-      he
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      TapTitans2 の攻略・便利ツールなど<br><br>
+      <p>ご意見ご要望あれば、<a href="https://forms.gle/rPgeWz2KmLrBpqv7A" target="_blank">Googleフォーム</a>までお願いします。</p>
+      <li>
+        <nuxt-link to="/convert"
+        class="button--grey2"
+        >レイドログ変換くん <b-icon icon="link45deg"></b-icon></nuxt-link>
+      </li>
     </div>
   </div>
 </template>
@@ -34,12 +18,7 @@ export default {}
 
 <style>
 .container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  padding: 20px;
 }
 
 .title {

@@ -1,5 +1,17 @@
 <template>
   <div>
+      <b-navbar type="dark" variant="dark">
+    <b-navbar-nav>
+      <b-nav-item to="/"><b-icon icon="house-fill"></b-icon> Home </b-nav-item>
+      
+      <b-nav-item-dropdown text="Tools" right>
+        <b-dropdown-item to="/convert">ログ変換</b-dropdown-item>
+      </b-nav-item-dropdown>
+      <b-nav-item-dropdown text="Pages" right>
+        
+      </b-nav-item-dropdown>
+    </b-navbar-nav>
+  </b-navbar>
     <Nuxt />
   </div>
 </template>
@@ -53,6 +65,13 @@ html {
   text-decoration: none;
   padding: 10px 30px;
   margin-left: 15px;
+}
+
+.button--grey2 {
+  display: inline-block;
+  color: #657f9b;
+  text-decoration: none;
+  padding: 10px 0px;
 }
 
 .button--grey:hover {
