@@ -1,6 +1,6 @@
 # tt2nuxt
 
-https://tt2tools.web.app/index
+https://tt2tools.web.app
 
 ## Build Setup
 
