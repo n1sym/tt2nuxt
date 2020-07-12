@@ -10,6 +10,7 @@
       <b-nav-item-dropdown text="Pages" right>
         
       </b-nav-item-dropdown>
+      <b-nav-item to="/history"><b-icon icon="file-text"></b-icon> 更新履歴 </b-nav-item>
     </b-navbar-nav>
   </b-navbar>
     <Nuxt />

@@ -20,35 +20,81 @@
       @dismissed="dismissCountDown=0"
       @dismiss-count-down="countDownChanged"
     >
-      コピーしました!
+      レイドリザルトをコピーしました!
     </b-alert>
-    <b-button variant="primary" v-on:click="clear">Clear</b-button>
-    <b-button variant="outline-info" v-on:click="onCopy(message); showAlert()">Copy!</b-button>
+    <b-button variant="outline-primary" v-on:click="clear"><b-icon icon="trash" font-scale="1"></b-icon> Clear </b-button>
+    <b-button variant="outline-info" v-on:click="onCopy(message); showAlert()"><b-icon icon="clipboard" font-scale="1"></b-icon> Copy!</b-button>
+    <b-button variant="outline-secondary" v-b-toggle.collapse-1><b-icon icon="gear" font-scale="1"></b-icon> Option ▼</b-button>
+    <b-collapse id="collapse-1" class="mt-2">
+    <b-card>
+      <p class="card-text">
+        TODO: 禁止部位とかの設定
+      </p>
+    </b-card>
+    </b-collapse>
     <br><br>
     
     
      <b-form-checkbox v-model="small" inline>Small</b-form-checkbox>
-     <b-form-checkbox v-model="striped" inline>Striped</b-form-checkbox>
+     <b-form-checkbox v-model="striped" inline>Stripe</b-form-checkbox>
      <b-form-checkbox v-model="rank_open" inline>Rank</b-form-checkbox>
      <b-form-checkbox v-model="code_open" inline>Code</b-form-checkbox>
      <b-form-checkbox v-model="attack_open" inline>Attack</b-form-checkbox>
+     <b-form-checkbox v-model="total_open" inline>Total</b-form-checkbox>
      <b-form-checkbox v-model="ave_open" inline>Ave</b-form-checkbox>
+     <b-form-checkbox v-model="head_open" inline>Head</b-form-checkbox>
+     <b-form-checkbox v-model="torso_open" inline>Torso</b-form-checkbox>
+     <b-form-checkbox v-model="arm_open" inline>Arm</b-form-checkbox>
+     <b-form-checkbox v-model="leg_open" inline>Leg</b-form-checkbox>
      <b-form-checkbox v-model="detail_open" inline>Detail</b-form-checkbox>
     <br><br>
-    <b-table :striped="striped" hover :items="items" :fields="fields" v-if="open" :small="small">
-
+    <b-table :striped="striped" 
+             hover 
+             :items="items" 
+             :fields="fields" 
+             v-if="open" 
+             :small="small" 
+             :sort-by.sync="sortBy"
+             :sort-desc.sync="sortDesc">
       <template v-slot:cell(details)="row">
         <b-button size="sm" @click="row.toggleDetails" class="mr-2">
           {{ row.detailsShowing ? 'Hide' : 'Show'}} 
         </b-button>
       </template>
 
+      <template v-slot:cell(head)="row">
+        {{ row.item.head }}%
+      </template>
+      <template v-slot:cell(torso)="row">
+        {{ row.item.torso }}%
+      </template>
+      <template v-slot:cell(arm)="row">
+        {{ row.item.arm }}%
+      </template>
+      <template v-slot:cell(leg)="row">
+        {{ row.item.leg }}%
+      </template>
+
       <template v-slot:row-details="row">
         <b-card>
+          <div class="chart_container">
+              <p class="donut"> <doughnut-chart :chart-data="chartData(row.item.rank -1)" :options="chartOptions"/></p>
+          </div>
+          <br>
+          <br>
           <b-row class="mb-2">
-            <b-col sm="3" class="text-sm-right"><b>detail:</b></b-col>
-            <b-col>{{ row.items.code }}</b-col>
-            <b-col>{{ "実装中..." }}</b-col>
+            <b-col class="text-left">
+              <ul v-for="(titan, index) in titans" :key="titan">
+                <li>
+                 {{index+1}} - <b>{{ titan }}</b>
+                 <ul v-for="(dmg,index2) in items[row.item.rank -1].titans[index]" :key="dmg">
+                   <li>
+                    {{index2.charAt(0).toUpperCase() + index2.slice(1)}} - {{ dmg.toLocaleString() }}
+                   </li>
+                 </ul>
+                </li>
+              </ul>
+            </b-col>
           </b-row>
 
         </b-card>
@@ -69,34 +115,102 @@ export default {
       dismissSecs: 3,
       dismissCountDown: 0,
       showDismissibleAlert: false,
+      sortBy: 'rank',
+      sortDesc: false,
       open: false,
       striped: true,
       ave_open: false,
+      total_open: true,
       rank_open: true,
       code_open: true,
       attack_open: true,
-      detail_open: false,
+      detail_open: true,
+      head_open: false,
+      torso_open: false,
+      arm_open: false,
+      leg_open: false,
       small: true,
-      fields: ['rank', 'name', 'code', 'attack', 'damage'],
+      chartColors: [
+        '#f0e68c',
+        '#4682b4',
+        '#ffc0cb',
+        '#90ee90',
+      ],
+      chartLabels: ['head', 'torso', 'arm', 'leg'],
+      fields: [{ key: 'rank', sortable: true },
+               'name',
+               'code', 
+               { key: 'attack', sortable: true },
+               { key: 'total', sortable: true },
+               'details',
+               ],
+      chartOptions: { responsive: true,
+                      maintainAspectRatio: true},
+      titans: [],
       items: [
           { name:"test" , damage:0},
         ]
     }
   },
+
+  computed: {
+    
+  },
+
   watch: {
+    head_open: function(val){
+      if (val === false){
+       this.fields = this.fields.filter(i => { return i.key !== 'head'})
+     } else {
+     this.fields.push({ key: 'head', sortable: true })
+     this.fields = this.order_fields(this.fields)
+     }
+    },
+    torso_open: function(val){
+      if (val === false){
+       this.fields = this.fields.filter(i => { return i.key !== 'torso'})
+     } else {
+     this.fields.push({ key: 'torso', sortable: true })
+     this.fields = this.order_fields(this.fields)
+     }
+    },
+    arm_open: function(val){
+      if (val === false){
+       this.fields = this.fields.filter(i => { return i.key !== 'arm'})
+     } else {
+     this.fields.push({ key: 'arm', sortable: true })
+     this.fields = this.order_fields(this.fields)
+     }
+    },
+    leg_open: function(val){
+      if (val === false){
+       this.fields = this.fields.filter(i => { return i.key !== 'leg'})
+     } else {
+     this.fields.push({ key: 'leg', sortable: true })
+     this.fields = this.order_fields(this.fields)
+     }
+    },
     ave_open: function(val){
       if (val === false){
-       this.fields = this.fields.filter(i => { return i !== 'ave'})
+       this.fields = this.fields.filter(i => { return i.key !== 'ave'})
      } else {
-     this.fields.push('ave')
+     this.fields.push({ key: 'ave', sortable: true })
+     this.fields = this.order_fields(this.fields)
+     }
+    },
+    total_open: function(val){
+      if (val === false){
+       this.fields = this.fields.filter(i => { return i.key !== 'total'})
+     } else {
+     this.fields.push({ key: 'total', sortable: true })
      this.fields = this.order_fields(this.fields)
      }
     },
     rank_open: function(val){
       if (val === false){
-       this.fields = this.fields.filter(i => { return i !== 'rank'})
+       this.fields = this.fields.filter(i => { return i.key !== 'rank'})
      } else {
-     this.fields.push('rank')
+     this.fields.push({ key: 'rank', sortable: true })
      this.fields = this.order_fields(this.fields)
      }
     },
@@ -110,9 +224,9 @@ export default {
     },
     attack_open: function(val){
       if (val === false){
-       this.fields = this.fields.filter(i => { return i !== 'attack'})
+       this.fields = this.fields.filter(i => { return i.key !== 'attack'})
      } else {
-     this.fields.push('attack')
+     this.fields.push({ key: 'attack', sortable: true })
      this.fields = this.order_fields(this.fields)
      }
     },
@@ -146,6 +260,12 @@ export default {
          while(data[count+1][0]==name){
            count++
          }
+
+         this.titans = []
+         for(var j=0; j<count; j++){
+            this.titans.push(data[j+1][4])
+          }
+
          var result = new Array(50)
          this.items = [{ name:"test" , damage:0}]
          this.items.pop()
@@ -156,10 +276,40 @@ export default {
                 var player_code = data[i*count + 1][1]
                 if (player_code === undefined){ break }
                 var total_attack = data[i*count + 1][2]
-                var total_damage = 0
+                var total_damage = 1
+                var parts_damage = {head:0, torso:0, arm:0, leg:0}
+                var titans = []
+                for(var j=0; j<count; j++){
+                 titans.push({head:0, torso:0, arm:0, leg:0})
+                }
+                
                 for(var j=0; j<count; j++){
                   total_damage += Number(data[i*count + j + 1][5])
+                  for(var k=6; k<22; k++){
+                    if(k==6 || k==14){
+                      parts_damage.head += Number(data[i*count + j + 1][k])
+                      titans[j].head += Number(data[i*count + j + 1][k])
+                      }
+                    if(k==7 || k==15){
+                      parts_damage.torso += Number(data[i*count + j + 1][k])
+                      titans[j].torso += Number(data[i*count + j + 1][k])
+                      }
+                    if(k==8 || k==10 || k==18 || k==16 || k==11 || k==19 || k==9 || k==17){
+                      parts_damage.arm += Number(data[i*count + j + 1][k])
+                      titans[j].arm += Number(data[i*count + j + 1][k])
+                      }
+                    if(k==12 || k==20 || k==13 || k==21){
+                      parts_damage.leg += Number(data[i*count + j + 1][k])
+                      titans[j].leg += Number(data[i*count + j + 1][k])
+                      }
+                  }
                 }
+                var persents = {head:0, torso:0, arm:0, leg:0}
+                persents.head = (100* parts_damage.head / total_damage).toFixed(1)
+                persents.torso = (100*parts_damage.torso / total_damage).toFixed(1)
+                persents.arm = (100*parts_damage.arm / total_damage).toFixed(1)
+                persents.leg = (100*parts_damage.leg / total_damage).toFixed(1)
+
                 var ave_damage = 0
                 if (total_attack !== 0){ave_damage = total_damage / total_attack}
                 ave_damage = Math.round(ave_damage)
@@ -167,8 +317,15 @@ export default {
                                   name: player_name, 
                                   code: player_code,
                                   attack: total_attack,
-                                  damage: total_damage,
-                                  ave: ave_damage
+                                  total: total_damage,
+                                  ave: ave_damage,
+                                  parts: parts_damage,
+                                  percents: persents,
+                                  titans: titans,
+                                  head: persents.head,
+                                  torso: persents.torso,
+                                  arm: persents.arm,
+                                  leg: persents.leg,
                                   })
          }
          
@@ -182,6 +339,7 @@ export default {
       this.items.push({ name: val})
     },
   },
+
   methods: {
    clear: function(){
      this.message = ""
@@ -194,48 +352,48 @@ export default {
      if (this.message.length < 300){return}
      this.dismissCountDown = this.dismissSecs
    },
+   chartData: function (id) {
+     console.log(this.items.length)
+      return {
+        datasets: [
+          {
+            data:[this.items[id].parts.head, 
+                  this.items[id].parts.torso, 
+                  this.items[id].parts.arm,
+                  this.items[id].parts.leg,
+                  ],
+            backgroundColor: this.chartColors,
+          },
+        ],
+        labels: this.chartLabels,
+      };
+    },
    onCopy: function(message){
      if (this.message.length < 300){return}
      var text = ""
-     const regax = /\n/gi
-     var s = this.message.replace(regax,',')
-     var arr = new Array()
-     arr = s.split(',')
-     var data = new Array(1000)
-     for (var i=0; i<data.length; i++){
-       data[i] = new Array(30)
-     }
-     for (var i = 0; i < data.length; i++) {
-            for (var j = 0; j < data[i].length; j++) {
-                var k = j + 30*i
-                data[i][j] = arr[k]
-            }
-     }
-     var count = 0
-     const name = data[1][0]
-     while(data[count+1][0]==name){
-       count++
-     }
-     
-     for (var i = 0; i < 50; i++){
-       var player_name = data[i*count + 1][0]
-       var player_code = data[i*count + 1][1]
-       if (player_code === undefined){ break }
-       var total_attack = data[i*count + 1][2]
-       var total_damage = 0
-       for(var j=0; j<count; j++){
-         total_damage += Number(data[i*count + j + 1][5])
-       }
-       var ave_damage = 0
-       if (total_attack !== 0){ave_damage = total_damage / total_attack}
-       ave_damage = Math.round(ave_damage)
-
+     if (this.rank_open === true) {text += 'Rank,'}
+     text += 'Name,'
+     if (this.code_open === true) {text += 'Code,'}
+     if (this.attack_open === true) {text += 'TotalAttacks,'}
+     if (this.total_open === true) {text += 'TotalDamage,'}
+     if (this.ave_open === true) {text += 'AverageDamage,'}
+     if (this.head_open === true) {text += 'Head(%),'}
+     if (this.torso_open === true) {text += 'Torso(%),'}
+     if (this.arm_open === true) {text += 'Arm(%),'}
+     if (this.leg_open === true) {text += 'Leg(%),'}
+     text = text.slice(0,-1)
+     text += "\n"
+     for (var i = 0; i < this.items.length; i++){
        if (this.rank_open === true) {text += i+1 + ','}
-       text += player_name + ','
-       if (this.code_open === true) {text += player_code + ','}
-       if (this.attack_open === true) {text += String(total_attack) + ','}
-       text += String(total_damage) + ','
-       if (this.ave_open === true) {text += String(ave_damage) + ','}
+       text += this.items[i].name + ','
+       if (this.code_open === true) {text += this.items[i].code + ','}
+       if (this.attack_open === true) {text += String(this.items[i].attack) + ','}
+       if (this.total_open === true) {text += String(this.items[i].total) + ','}
+       if (this.ave_open === true) {text += String(this.items[i].ave) + ','}
+       if (this.head_open === true) {text += String(this.items[i].head) + ','}
+       if (this.torso_open === true) {text += String(this.items[i].torso) + ','}
+       if (this.arm_open === true) {text += String(this.items[i].arm) + ','}
+       if (this.leg_open === true) {text += String(this.items[i].leg) + ','}
        text = text.slice(0,-1)
        text += "\n"
      }
@@ -247,6 +405,16 @@ export default {
 <style>
 .container {
   padding: 20px;
+}
+.donut {
+   width: 280px;
+   margin: auto;
+}
+@media screen and (min-width: 768px) {
+.donut {
+   width: 400px;
+   margin: auto;
+}
 }
 .error {
   color: red;

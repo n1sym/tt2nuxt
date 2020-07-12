@@ -35,7 +35,11 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    '@/plugins/mixin-common-methods'
+    '@/plugins/mixin-common-methods',
+    {
+      src: '@/plugins/vue-chartjs',
+      ssr: false,
+    },
   ],
   /*
   ** Auto import components
