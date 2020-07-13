@@ -2,6 +2,27 @@ import Vue from 'vue'
 
 Vue.mixin({
   methods: {
+    cookie_set: function () {
+      const setCached = 
+        {
+          striped: this.striped,
+          ave_open: this.ave_open,
+          total_open: this.total_open,
+          rank_open: this.rank_open,
+          code_open: this.code_open,
+          attack_open: this.attack_open,
+          detail_open: this.detail_open,
+          head_open: this.head_open,
+          torso_open: this.torso_open,
+          arm_open: this.arm_open,
+          leg_open: this.leg_open,
+          small: this.small,
+        }
+      this.$cookies.set('convert_cookies', setCached, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 70
+      })
+    },
     order_fields: function (fields) {
       var order_fields = []
       function isRank(fruit) { 

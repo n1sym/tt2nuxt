@@ -28,7 +28,37 @@
     <b-collapse id="collapse-1" class="mt-2">
     <b-card>
       <p class="card-text">
-        TODO: 禁止部位とかの設定
+        <p><b>:禁止部位の設定</b></p>
+        <img class="img" :src="require(`@/assets/image/titanexample.png`)" width='280'><br><br>
+        <div>
+         <b-table small striped hover :items="check_items">
+           <template v-slot:cell(1)="row">
+            <b-form-checkbox></b-form-checkbox>
+           </template>
+           <template v-slot:cell(2)="row">
+            <b-form-checkbox></b-form-checkbox>
+           </template>
+           <template v-slot:cell(3)="row">
+            <b-form-checkbox></b-form-checkbox>
+           </template>
+           <template v-slot:cell(4)="row">
+            <b-form-checkbox></b-form-checkbox>
+           </template>
+           <template v-slot:cell(5)="row">
+            <b-form-checkbox></b-form-checkbox>
+           </template>
+           <template v-slot:cell(6)="row">
+            <b-form-checkbox></b-form-checkbox>
+           </template>
+           <template v-slot:cell(7)="row">
+            <b-form-checkbox></b-form-checkbox>
+           </template>
+           <template v-slot:cell(8)="row">
+            <b-form-checkbox></b-form-checkbox>
+           </template>
+
+         </b-table>
+        </div>
       </p>
     </b-card>
     </b-collapse>
@@ -130,6 +160,18 @@ export default {
       arm_open: false,
       leg_open: false,
       small: true,
+      parts_selected: [],
+      check_items: [
+          { titan: 'terro', 1: '',  2: '', 3: "", 4: "",5: "", 6: "", 7: "", 8: "", },
+          { titan: 'jukk', name: '' },
+          { titan: 'sterl', name: '' },
+          { titan: 'mohaca', name: '' },
+          { titan: 'takedar', name: '' },
+          { titan: 'lojak', name: '' },
+      ],
+      parts_options: [
+          
+        ],
       chartColors: [
         '#f0e68c',
         '#4682b4',
@@ -159,6 +201,7 @@ export default {
 
   watch: {
     head_open: function(val){
+      this.cookie_set()
       if (val === false){
        this.fields = this.fields.filter(i => { return i.key !== 'head'})
      } else {
@@ -167,6 +210,7 @@ export default {
      }
     },
     torso_open: function(val){
+      this.cookie_set()
       if (val === false){
        this.fields = this.fields.filter(i => { return i.key !== 'torso'})
      } else {
@@ -175,6 +219,7 @@ export default {
      }
     },
     arm_open: function(val){
+      this.cookie_set()
       if (val === false){
        this.fields = this.fields.filter(i => { return i.key !== 'arm'})
      } else {
@@ -183,6 +228,7 @@ export default {
      }
     },
     leg_open: function(val){
+      this.cookie_set()
       if (val === false){
        this.fields = this.fields.filter(i => { return i.key !== 'leg'})
      } else {
@@ -191,6 +237,7 @@ export default {
      }
     },
     ave_open: function(val){
+      this.cookie_set()
       if (val === false){
        this.fields = this.fields.filter(i => { return i.key !== 'ave'})
      } else {
@@ -199,6 +246,7 @@ export default {
      }
     },
     total_open: function(val){
+      this.cookie_set()
       if (val === false){
        this.fields = this.fields.filter(i => { return i.key !== 'total'})
      } else {
@@ -207,6 +255,7 @@ export default {
      }
     },
     rank_open: function(val){
+      this.cookie_set()
       if (val === false){
        this.fields = this.fields.filter(i => { return i.key !== 'rank'})
      } else {
@@ -215,6 +264,7 @@ export default {
      }
     },
     code_open: function(val){
+      this.cookie_set()
       if (val === false){
        this.fields = this.fields.filter(i => { return i !== 'code'})
      } else {
@@ -223,6 +273,7 @@ export default {
      }
     },
     attack_open: function(val){
+      this.cookie_set()
       if (val === false){
        this.fields = this.fields.filter(i => { return i.key !== 'attack'})
      } else {
@@ -231,6 +282,7 @@ export default {
      }
     },
     detail_open: function(val){
+      this.cookie_set()
       if (val === false){
        this.fields = this.fields.filter(i => { return i !== 'details'})
      } else {
@@ -399,7 +451,25 @@ export default {
      }
      this.$copyText(text);
    }
-  }
+  },
+  created() {
+    if (this.$cookies.get('convert_cookies') != null){
+　　　var parse = JSON.parse(this.$cookies.get('convert_cookies'))
+    　this.striped = parse.striped
+    　this.ave_open = parse.ave_open
+    　this.total_open = parse.total_open
+    　this.rank_open = parse.rank_open
+    　this.code_open = parse.code_open
+    　this.attack_open = parse.attack_open
+    　this.detail_open = parse.detail_open
+    　this.head_open = parse.head_open
+    　this.torso_open = parse.torso_open
+    　this.arm_open = parse.arm_open
+    　this.leg_open = parse.leg_open
+    　this.small = parse.small
+    }
+    
+  },
 }
 </script>
 <style>
