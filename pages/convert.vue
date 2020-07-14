@@ -27,44 +27,49 @@
     <b-button variant="outline-secondary" v-b-toggle.collapse-1><b-icon icon="gear" font-scale="1"></b-icon> Option ▼</b-button>
     <b-collapse id="collapse-1" class="mt-2">
     <b-card>
-      <p class="card-text">
+      <div class="card-text">
         <p><b>:禁止部位の設定</b></p>
         <img class="img" :src="require(`@/assets/image/titanexample.png`)" width='280'><br><br>
-        <div>
-         <b-table small striped hover :items="check_items">
+        <div class="parts-table">
+         <b-table small striped hover :items="check_items" :fields="parts_fields">
+           <template v-slot:cell(titan)="row">
+            {{ check_items[row.index][0] }}
+           </template>
            <template v-slot:cell(1)="row">
-            <b-form-checkbox></b-form-checkbox>
+            <b-form-checkbox v-model="check_items[row.index][1]"></b-form-checkbox>
            </template>
            <template v-slot:cell(2)="row">
-            <b-form-checkbox></b-form-checkbox>
+            <b-form-checkbox v-model="check_items[row.index][2]"></b-form-checkbox>
            </template>
            <template v-slot:cell(3)="row">
-            <b-form-checkbox></b-form-checkbox>
+            <b-form-checkbox v-model="check_items[row.index][3]"></b-form-checkbox>
            </template>
            <template v-slot:cell(4)="row">
-            <b-form-checkbox></b-form-checkbox>
+            <b-form-checkbox v-model="check_items[row.index][4]"></b-form-checkbox>
            </template>
            <template v-slot:cell(5)="row">
-            <b-form-checkbox></b-form-checkbox>
+            <b-form-checkbox v-model="check_items[row.index][5]"></b-form-checkbox>
            </template>
            <template v-slot:cell(6)="row">
-            <b-form-checkbox></b-form-checkbox>
+            <b-form-checkbox v-model="check_items[row.index][6]"></b-form-checkbox>
            </template>
            <template v-slot:cell(7)="row">
-            <b-form-checkbox></b-form-checkbox>
+            <b-form-checkbox v-model="check_items[row.index][7]"></b-form-checkbox>
            </template>
            <template v-slot:cell(8)="row">
-            <b-form-checkbox></b-form-checkbox>
+            <b-form-checkbox v-model="check_items[row.index][8]"></b-form-checkbox>
            </template>
-
          </b-table>
         </div>
-      </p>
+      </div>
     </b-card>
     </b-collapse>
     <br><br>
-    
-    
+    <div>
+     <b-tabs v-model="tabIndex" content-class="mt-3">
+      <b-tab title="説明"><p>I'm the first tab {{tabIndex}}</p></b-tab>
+      <b-tab title="リザルト">
+
      <b-form-checkbox v-model="small" inline>Small</b-form-checkbox>
      <b-form-checkbox v-model="striped" inline>Stripe</b-form-checkbox>
      <b-form-checkbox v-model="rank_open" inline>Rank</b-form-checkbox>
@@ -116,7 +121,7 @@
             <b-col class="text-left">
               <ul v-for="(titan, index) in titans" :key="titan">
                 <li>
-                 {{index+1}} - <b>{{ titan }}</b>
+                 <b>{{ titan }}</b>
                  <ul v-for="(dmg,index2) in items[row.item.rank -1].titans[index]" :key="dmg">
                    <li>
                     {{index2.charAt(0).toUpperCase() + index2.slice(1)}} - {{ dmg.toLocaleString() }}
@@ -130,6 +135,36 @@
         </b-card>
       </template>
     </b-table>
+    </b-tab>
+      <b-tab title="禁止部位チェック">
+         <b-row class="my-1">
+           <b-col sm="4">
+            <label for="input-default">下限ダメージ:</label>
+          </b-col>
+        </b-row>
+        <b-row class="my-1">
+           <b-col sm="4">
+            <b-form-input id="input-default" v-model="kagen"></b-form-input>
+          </b-col>
+        </b-row><br>
+        <b-row class="mb-2">
+            <b-col class="text-left">
+              <ul v-for="(titan, index) in titans" :key="titan">
+                <li>
+                 <b>{{ titan }}</b>
+                 <ul v-for="(dmg,index2) in invalid_list[index].name" :key="dmg">
+                   <li>
+                   {{ invalid_list[index].name[index2]}}, {{ invalid_list[index].parts[index2]}}, {{ invalid_list[index].damage[index2]}}
+                   </li>
+                 </ul>
+                </li>
+              </ul>
+            </b-col>
+          </b-row>
+
+      </b-tab>
+     </b-tabs>
+    </div>
     
   </div>
 </template>
@@ -144,8 +179,10 @@ export default {
       results: [],
       dismissSecs: 3,
       dismissCountDown: 0,
+      tabIndex: 0,
       showDismissibleAlert: false,
       sortBy: 'rank',
+      kagen: 30000,
       sortDesc: false,
       open: false,
       striped: true,
@@ -160,18 +197,14 @@ export default {
       arm_open: false,
       leg_open: false,
       small: true,
-      parts_selected: [],
       check_items: [
-          { titan: 'terro', 1: '',  2: '', 3: "", 4: "",5: "", 6: "", 7: "", 8: "", },
-          { titan: 'jukk', name: '' },
-          { titan: 'sterl', name: '' },
-          { titan: 'mohaca', name: '' },
-          { titan: 'takedar', name: '' },
-          { titan: 'lojak', name: '' },
+          ["terro",false,false,false,false,false,false,false,false],
+          ["sterl",false,false,false,false,false,false,false,false],
+          ["jukk",false,false,false,false,false,false,false,false],
+          ["lojak",false,false,false,false,false,false,false,false],
+          ["mohaca",false,false,false,false,false,false,false,false],
+          ["takedar",false,false,false,false,false,false,false,false],
       ],
-      parts_options: [
-          
-        ],
       chartColors: [
         '#f0e68c',
         '#4682b4',
@@ -186,9 +219,11 @@ export default {
                { key: 'total', sortable: true },
                'details',
                ],
+      parts_fields: ['titan','1','2','3','4','5','6','7','8'],
       chartOptions: { responsive: true,
                       maintainAspectRatio: true},
       titans: [],
+      invalid_list: [],
       items: [
           { name:"test" , damage:0},
         ]
@@ -200,6 +235,12 @@ export default {
   },
 
   watch: {
+    kagen: function(){
+      this.invalid_detect()
+    },
+    check_items: function() {
+      this.parts_cookie_set()
+    },
     head_open: function(val){
       this.cookie_set()
       if (val === false){
@@ -293,36 +334,34 @@ export default {
     message: function (val) {
       var message = val
       if (this.message.includes(',') && this.message.length > 500){
-         const regax = /\n/gi
-         var s = this.message.replace(regax,',')
-         var arr = new Array()
-         arr = s.split(',')
-         var data = new Array(1000)
-         for (var i=0; i<data.length; i++){
-           data[i] = new Array(30)
+        const regax = /\n/gi
+        var s = this.message.replace(regax,',')
+        var arr = new Array()
+        arr = s.split(',')
+        var data = new Array(1000)
+        for (var i=0; i<data.length; i++){
+          data[i] = new Array(30)
+        }
+        for (var i = 0; i < data.length; i++) {
+               for (var j = 0; j < data[i].length; j++) {
+                   var k = j + 30*i
+                   data[i][j] = arr[k]
+               }
+        }
+        var count = 0
+        const name = data[1][0]
+        while(data[count+1][0]==name){
+          count++
+        }
+        this.titans = []
+        for(var j=0; j<count; j++){
+          var s = String(j+1) + " - " + data[j+1][4]
+           this.titans.push(s)
          }
-         for (var i = 0; i < data.length; i++) {
-                for (var j = 0; j < data[i].length; j++) {
-                    var k = j + 30*i
-                    data[i][j] = arr[k]
-                }
-         }
-         var count = 0
-         const name = data[1][0]
-         while(data[count+1][0]==name){
-           count++
-         }
-
-         this.titans = []
-         for(var j=0; j<count; j++){
-            this.titans.push(data[j+1][4])
-          }
-
-         var result = new Array(50)
-         this.items = [{ name:"test" , damage:0}]
-         this.items.pop()
-
-         for (var i = 0; i < 50; i++) {
+        var result = new Array(50)
+        this.items = [{ name:"test" , damage:0}]
+        this.items.pop()
+        for (var i = 0; i < 50; i++) {
                 result[i] = data[i*count + 1][0]
                 var player_name = data[i*count + 1][0]
                 var player_code = data[i*count + 1][1]
@@ -379,16 +418,13 @@ export default {
                                   arm: persents.arm,
                                   leg: persents.leg,
                                   })
-         }
-         
-         this.open = true
-         return 
+        }
+        this.invalid_detect()
+        this.tabIndex = 1
+        return
        } else {
          return "hello"
        }
-      this.output_message = "hello"
-      this.items.pop()
-      this.items.push({ name: val})
     },
   },
 
@@ -468,7 +504,10 @@ export default {
     　this.leg_open = parse.leg_open
     　this.small = parse.small
     }
-    
+    if (this.$cookies.get('parts_cookies') != null){
+　　　var parse = JSON.parse(this.$cookies.get('parts_cookies'))
+        this.check_items = parse
+    }
   },
 }
 </script>
@@ -476,15 +515,19 @@ export default {
 .container {
   padding: 20px;
 }
+
 .donut {
    width: 280px;
    margin: auto;
 }
 @media screen and (min-width: 768px) {
-.donut {
-   width: 400px;
-   margin: auto;
-}
+  .donut {
+     width: 400px;
+     margin: auto;
+  }
+  .parts-table {
+    width: 500px;
+  }
 }
 .error {
   color: red;
