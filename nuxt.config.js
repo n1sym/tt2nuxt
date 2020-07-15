@@ -1,4 +1,4 @@
-
+require('dotenv').config();
 export default {
   /*
   ** Nuxt rendering mode
@@ -50,6 +50,7 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    '@nuxtjs/dotenv',
     ['@nuxtjs/google-analytics', {
       id: 'UA-63047229-5'
     }]
@@ -73,5 +74,10 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+    extend (config, ctx) {
+      config.node = {
+        fs: "empty" 
+      }
+    }
   }
 }

@@ -1,8 +1,41 @@
 import Vue from 'vue'
+import firebase from "@/plugins/firebase"
 
 Vue.mixin({
   methods: {
+    save_data: function() {
+      var date = new Date()
+      var month = String(date.getMonth()+1)
+      var day = String(date.getDate())
+      var hour = String(date.getHours())
+      var minute = String(date.getMinutes())
+      var sec = String(date.getSeconds())
+      var name = "raidlog" + String(date.getFullYear()) + month +"/raid_log-" + this.items[0].name + ":" + this.items[1].name + ":" + this.items[2].name + ":" + this.clan_ave_damage + ":" + month + "-" + day + " " + hour + ":" + minute + ":" + sec
+      var text = ""
+      for (var i = 0; i < this.items.length; i++){
+        text += i+1 + ','
+        text += this.items[i].name + ','
+        text += this.items[i].code + ','
+        text += String(this.items[i].attack) + ','
+        text += String(this.items[i].total) + ','
+        text += String(this.items[i].ave) + ','
+        text += String(this.items[i].head) + ','
+        text += String(this.items[i].torso) + ','
+        text += String(this.items[i].arm) + ','
+        text += String(this.items[i].leg) + ','
+        text = text.slice(0,-1)
+        text += "<br>"
+      }
+      var file = new File([text], name, {
+        type: "text/html;charset=utf-8",
+      })
+      var ref = firebase.storage().ref().child(file.name)
+      ref.put(file).then(function(snapshot) {
+      })
+      console.log(name)
+    },
     invalid_detect: function() {
+      if (this.message.includes(',') == null || this.message.length < 500){return}
       const regax = /\n/gi
         var s = this.message.replace(regax,',')
         var arr = new Array()
@@ -58,6 +91,7 @@ Vue.mixin({
           }
         }
       }
+      var invalid_damage_total = 0
       var invalid_damage_list = []
       for(var j=0; j<count; j++){
          invalid_damage_list.push({"name":[],"titan":[], "parts":[], "damage":[]})
@@ -72,11 +106,13 @@ Vue.mixin({
                 invalid_damage_list[(data[i][3])]["titan"].push(data[i][4])
                 invalid_damage_list[(data[i][3])]["parts"].push(data[0][k])
                 invalid_damage_list[(data[i][3])]["damage"].push(data[i][k])
+                invalid_damage_total += Number(data[i][k])
               }
             }
           }
         }
       }
+      
       for (var i = 0; i < data.length; i++) {
         if (data[i][4] == undefined) {break;}
         if ((data[i][4]).includes('Sterl') || (data[i][4]).includes('スタール')){
@@ -87,6 +123,7 @@ Vue.mixin({
                 invalid_damage_list[(data[i][3])]["titan"].push(data[i][4])
                 invalid_damage_list[(data[i][3])]["parts"].push(data[0][k])
                 invalid_damage_list[(data[i][3])]["damage"].push(data[i][k])
+                invalid_damage_total += Number(data[i][k])
               }
             }
           }
@@ -102,6 +139,7 @@ Vue.mixin({
                 invalid_damage_list[(data[i][3])]["titan"].push(data[i][4])
                 invalid_damage_list[(data[i][3])]["parts"].push(data[0][k])
                 invalid_damage_list[(data[i][3])]["damage"].push(data[i][k])
+                invalid_damage_total += Number(data[i][k])
               }
             }
           }
@@ -117,6 +155,7 @@ Vue.mixin({
                 invalid_damage_list[(data[i][3])]["titan"].push(data[i][4])
                 invalid_damage_list[(data[i][3])]["parts"].push(data[0][k])
                 invalid_damage_list[(data[i][3])]["damage"].push(data[i][k])
+                invalid_damage_total += Number(data[i][k])
               }
             }
           }
@@ -132,6 +171,7 @@ Vue.mixin({
                 invalid_damage_list[(data[i][3])]["titan"].push(data[i][4])
                 invalid_damage_list[(data[i][3])]["parts"].push(data[0][k])
                 invalid_damage_list[(data[i][3])]["damage"].push(data[i][k])
+                invalid_damage_total += Number(data[i][k])
               }
             }
           }
@@ -147,6 +187,7 @@ Vue.mixin({
                 invalid_damage_list[(data[i][3])]["titan"].push(data[i][4])
                 invalid_damage_list[(data[i][3])]["parts"].push(data[0][k])
                 invalid_damage_list[(data[i][3])]["damage"].push(data[i][k])
+                invalid_damage_total += Number(data[i][k])
               }
             }
           }
@@ -154,10 +195,18 @@ Vue.mixin({
       }
       this.invalid_list = invalid_damage_list
       this.open = true
+      this.invalid_damage_total = invalid_damage_total
     },
     parts_cookie_set: function() {
       const parts_setCached = this.check_items
       this.$cookies.set('parts_cookies', parts_setCached, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 70
+      })
+    },
+    kagen_cookie_set: function() {
+      const kagen_setCached = this.kagen
+      this.$cookies.set('kagen_cookies', kagen_setCached, {
         path: '/',
         maxAge: 60 * 60 * 24 * 70
       })
@@ -177,6 +226,7 @@ Vue.mixin({
           arm_open: this.arm_open,
           leg_open: this.leg_open,
           small: this.small,
+          kagen: this.kagen
         }
       this.$cookies.set('convert_cookies', setCached, {
         path: '/',
