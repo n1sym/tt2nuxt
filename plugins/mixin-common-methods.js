@@ -98,7 +98,7 @@ Vue.mixin({
        }
       for (var i = 0; i < data.length; i++) {
         if (data[i][4] == undefined) {break;}
-        if ((data[i][4]).includes('Terro') || (data[i][4]).includes('テロ―')){
+        if ((data[i][4]).includes('Terro') || (data[i][4]).includes('テロ')){
           for (var k = 6; k < 22; k++){
             if (invalid_parts["terro"].includes(k)){
               if (data[i][k] != "0" && Number(data[i][k]) > this.kagen ){

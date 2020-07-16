@@ -169,14 +169,15 @@
             <label for="input-default">下限ダメージ:</label>
           </b-col>
         </b-row>
+        
         <b-row>
            <b-col class="kagen_input">
-            <b-form-input id="input-default" v-model="kagen"></b-form-input>
+            <b-form-input v-model="kagen"></b-form-input>
            </b-col>
           <b-col>
           <b-button variant="outline-secondary" v-on:click="reload"><b-icon icon="arrow-clockwise" font-scale="1"></b-icon> 更新 </b-button>
           </b-col>
-        </b-row><br>
+        </b-row><b-form-input id="range-1" v-model="kagen" type="range" min="0" max="100000" step="1000"></b-form-input><br>
         <div v-if="open" >
           <li>
            総計：<b>{{invalid_damage_total.toLocaleString()}}</b> ダメージ (<b>{{(100 * invalid_damage_total / clan_total_damage).toFixed(3) }}</b>%)
@@ -592,6 +593,10 @@ export default {
 }
 #setumei {
   padding-bottom: 5px;
+}
+#range-1 {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .donut {
