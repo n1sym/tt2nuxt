@@ -5,6 +5,9 @@
       <p>ご意見ご要望あれば、<a href="https://forms.gle/rPgeWz2KmLrBpqv7A" target="_blank">Googleフォーム</a>までお願いします。</p>
       <ul>
       <li id="upd">
+        AF一覧・解説ページを作成。tier、pool毎に表示、AF名検索機能を実装。<br>(2020-07-17)
+      </li>
+      <li id="upd">
         レイドログ変換に禁止部位チェッカー機能を追加しました。<br>(2020-07-15)
       </li>
       <li id="upd">
@@ -26,6 +29,12 @@ export default {}
 <style>
 .container {
   padding: 20px;
+}
+@media screen and (min-width: 768px) {
+.container {
+  padding: 20px;
+  width: 900px;
+}
 }
 
 #upd {

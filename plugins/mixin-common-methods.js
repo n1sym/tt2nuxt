@@ -3,6 +3,48 @@ import firebase from "@/plugins/firebase"
 
 Vue.mixin({
   methods: {
+    cookie_set_af: function () {
+      const setCached = 
+        {
+          selected_lang: this.selected_lang,
+          selected_tier: this.selected_tier,
+          selected_pool: this.selected_pool,
+        }
+      this.$cookies.set('cookie_set_af', setCached, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 70
+      })
+    },
+    check_opt: function(i) {
+      var art = this.artifacts[i]
+      if(this.selected_tier.includes(art.tier) == false){
+        return false
+      }
+      if(this.selected_pool.includes(art.pool) == false){
+        return false
+      }
+      if(this.text != ""){
+        if(art.name.toUpperCase().match(this.text.toUpperCase()) == null && art.name_jp.toUpperCase().match(this.text.toUpperCase()) == null){
+          return false
+        }
+      }
+      return true
+      
+    },
+    art_set: function(){
+      var items = []
+      for(var i=0; i<this.artifacts.length; i++){
+        if(this.check_opt(i)){
+        items.push(this.artifacts[i])
+        }
+      }
+      this.items = items
+    },
+    tier_view: function (i) {
+      switch(i){
+        case 0: return "S"; case 1: return "A"; case 2: return "B"; case 3: return "C"
+      }
+    },
     save_data: function() {
       var date = new Date()
       var month = String(date.getMonth()+1)
@@ -196,6 +238,31 @@ Vue.mixin({
       this.invalid_list = invalid_damage_list
       this.open = true
       this.invalid_damage_total = invalid_damage_total
+      this.kagen_check()
+      console.log("禁止部位処理です")
+    },
+    kagen_check: function() {
+      console.log(this.kagen)
+      var list = this.invalid_list
+      var view_list = []
+      for(var j=0; j<this.titans.length; j++){
+        view_list.push({"name":[],"titan":[], "parts":[], "damage":[]})
+      }
+      var kagen = this.kagen
+      var invalid_damage_total = 0
+      for(var i=0; i<list.length; i++){
+        for(var j=0; j<list[i].name.length; j++){
+          if (Number(list[i].damage[j]) >= kagen){
+            view_list[i]["name"].push(list[i].name[j])
+            view_list[i]["titan"].push(list[i].titan[j])
+            view_list[i]["parts"].push(list[i].parts[j])
+            view_list[i]["damage"].push(list[i].damage[j])
+            invalid_damage_total += Number(list[i].damage[j])
+          }
+        }
+      }
+      this.invalid_list_view = view_list
+      this.invalid_damage_total_view = invalid_damage_total
     },
     parts_cookie_set: function() {
       const parts_setCached = this.check_items

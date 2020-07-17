@@ -177,10 +177,10 @@
           <b-col>
           <b-button variant="outline-secondary" v-on:click="reload"><b-icon icon="arrow-clockwise" font-scale="1"></b-icon> 更新 </b-button>
           </b-col>
-        </b-row><b-form-input id="range-1" v-model="kagen" type="range" min="0" max="100000" step="1000"></b-form-input><br>
+        </b-row><b-form-input id="range-1" v-model="kagen" type="range" min="0" max="100000" step="10000"></b-form-input><br>
         <div v-if="open" >
           <li>
-           総計：<b>{{invalid_damage_total.toLocaleString()}}</b> ダメージ (<b>{{(100 * invalid_damage_total / clan_total_damage).toFixed(3) }}</b>%)
+           総計：<b>{{invalid_damage_total_view.toLocaleString()}}</b> ダメージ (<b>{{(100 * invalid_damage_total_view / clan_total_damage).toFixed(3) }}</b>%)
           </li>
           <br>
         <b-row class="mb-2">
@@ -188,9 +188,9 @@
               <ul v-for="(titan, index) in titans" :key="titan">
                 <li>
                  <b>{{ titan }}</b>
-                 <ul v-for="(dmg,index2) in invalid_list[index].name" :key="dmg">
+                 <ul v-for="(dmg,index2) in invalid_list_view[index].name" :key="dmg">
                    <li>
-                   {{ invalid_list[index].name[index2]}}, {{ invalid_list[index].parts[index2]}}, {{ invalid_list[index].damage[index2]}}
+                   {{ invalid_list_view[index].name[index2]}}, {{ invalid_list_view[index].parts[index2]}}, {{ invalid_list_view[index].damage[index2]}}
                    </li>
                  </ul>
                 </li>
@@ -223,6 +223,7 @@ export default {
       clan_total_damage: 1,
       clan_ave_damage: "0",
       invalid_damage_total: 0,
+      invalid_damage_total_view: 0,
       sortDesc: false,
       open: false,
       striped: true,
@@ -264,6 +265,7 @@ export default {
                       maintainAspectRatio: true},
       titans: [],
       invalid_list: [],
+      invalid_list_view: [],
       items: [
           { name:"test" , damage:0},
         ]
@@ -276,7 +278,9 @@ export default {
 
   watch: {
     kagen: function(){
-      this.invalid_detect()
+      if (this.items.length > 1){
+        this.kagen_check()
+      }
       this.kagen_cookie_set()
     },
     check_items: function() {
@@ -470,6 +474,7 @@ export default {
         this.clan_total_damage = clan_total_damage
         this.invalid_detect()
         this.tabIndex = 1
+        console.log("リザルト処理です")
         
         return
        } else {

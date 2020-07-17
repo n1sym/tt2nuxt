@@ -1,23 +1,54 @@
 <template>
   <div class="container">
     <div>
-      <b>: AF tier list</b><br><br><p><b-icon icon="cone-striped" animation="fade" font-scale="1.5"></b-icon>  工事中... </p>
+      <b>: アーティファクト一覧・解説</b><br><br>
+      <div class="menu">
+      <b-form-input v-model="text" v-on:keyup.enter="search" type="search" placeholder="AF名で検索" class="searchbar"></b-form-input>
+      <div class="afname"></div>
+      <b-button variant="outline-info" v-on:click="search"><b-icon icon="search"></b-icon> 検索 </b-button>
+      </div>
+      <b-button id="top_btn" v-on:click="scrollTop"><b-icon icon="caret-up-fill"></b-icon> TOP</b-button>
+      <br>
+      
       <b-form-group>
       <b-form-radio-group
         id="btn-radios-2"
-        v-model="selected"
-        :options="options"
+        v-model="selected_lang"
+        :options="options_lang"
         buttons
         button-variant="outline-secondary"
         size="sm"
         name="radio-btn-outline"
       ></b-form-radio-group>
       </b-form-group>
+      <div class="afname"></div>
+      <b-form-group>
+      <b-form-checkbox-group
+        v-model="selected_tier"
+        :options="options_tier"
+        name="flavour-1"
+      ></b-form-checkbox-group>
+      </b-form-group>
 
-      <hr>
+      <div class="afname"></div>
+      <div class="menu">
+        <b-form-group label="" v-b-tooltip.html title="<b>pool 1</b> : 1~5番目に発見<br> <b>pool 2</b> : 6~30番目に発見<br><b>pool 3</b> : 31番目以降に発見">
+        <b-form-checkbox-group
+        v-model="selected_pool"
+        :options="options_pool"
+        name="flavour-1"
+      ></b-form-checkbox-group> 
+      </b-form-group>
+      
+
+      
+      
+      </div>
+      
+      <br>
 
       <div v-for="(item) in items" :key="item.id">
-        <div class="menu">
+        <div class="afmenu">
         <div :class="`afimage${item.enchant}`"><img class="img" :src="require(`@/assets/image/artifact/${item.acronym}.png`)" width='40'></div>
         <div class="afname">
           <b>
@@ -26,10 +57,11 @@
             <div v-if="enja"> {{ item.name }} : {{ item.name_jp }} </div>
           </b></div>
         </div>
-        <div div class="afdesc">
-          
- 
+        <div div class="afinfo">
+          tier: <b>{{tier_view(item.tier)}}</b> / pool: {{ item.pool }} / match: <b>{{ item.match }}</b> <a v-if="item.maxlevel"> / max_level: {{item.maxlevel}}</a>
+        </div>
 
+        <div div class="afdesc">
           {{ item.description }} <br> <br>
         </div>
          
@@ -45,15 +77,30 @@ export default {
   data () {
     return {
       en: true,
+      text: "",
       ja: false,
       enja: false,
-      selected: 'en',
-        options: [
-          { text: '英語', value: 'en' },
-          { text: '日本語', value: 'ja' },
-          { text: '両方', value: 'enja' }
-        ],
-      items: [
+      selected_lang: 'en',
+      options_lang: [
+        { text: '英語', value: 'en' },
+        { text: '日本語', value: 'ja' },
+        { text: '両方', value: 'enja' }
+      ],
+      selected_tier: [0,1,2,3],
+      options_tier: [
+        { text: ' tier S ', value: 0 },
+        { text: ' tier A ', value: 1 },
+        { text: ' tier B ', value: 2 },
+        { text: ' tier C ', value: 3 }
+      ],
+      selected_pool: [1,2,3],
+      options_pool: [
+        { text: ' pool 1 ', value: 1 },
+        { text: ' pool 2 ', value: 2 },
+        { text: ' pool 3 ', value: 3 },
+      ],
+
+      artifacts: [
        {
          "id": 0,
          "name": "Book of Shadows",
@@ -132,7 +179,7 @@ export default {
          "name_jp": "Khrysosボウル",
          "acronym": "KBo",
          "tier": 1,
-         "pool": 1,
+         "pool": 3,
          "match": "All",
          "enchant": "",
          "maxlevel": "",
@@ -1218,12 +1265,18 @@ export default {
          "maxlevel": 60,
          "description": "BOSSの制限時間増加（最大+60秒）"
        }
-      ]     
+      ],
+      items: [
+
+      ],     
     }
   },
+  computed: {
+  },
   watch: {
-    selected: function(){
-      switch(this.selected){
+    selected_lang: function(){
+      this.cookie_set_af()
+      switch(this.selected_lang){
         case "en":
           this.en = true; this.ja = false; this.enja = false; break
         case "ja":
@@ -1232,14 +1285,38 @@ export default {
           this.en = false; this.ja = false; this.enja = true; break    
       }
     },
+    selected_tier: function(){
+      this.cookie_set_af()
+      this.art_set()
+    },
+    selected_pool: function(){
+      this.cookie_set_af()
+      this.art_set()
+    },
   },
-  method: {
-    afimage(index){
-
-    }
+  methods: {
+    search: function(){
+      this.art_set()
+    },
+    scrollTop: function(){
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    },
+  },
+  created() {
+    this.art_set()
+    //if (this.$cookies.get('cookie_set_af') != null){
+　　//　var parse = JSON.parse(this.$cookies.get('cookie_set_af'))
+    //  console.log(parse.selected_pool)
+    //　this.selected_lang = parse.selected_lang
+    //　this.selected_pool = parse.selected_pool
+    //　this.selected_tier = parse.selected_tier
+    //}
   },
   mounted() {
-
+    this.art_set()
   },
 }
 </script>
@@ -1248,7 +1325,17 @@ export default {
 .container {
   padding: 20px;
 }
+@media screen and (min-width: 768px) {
+.container {
+  padding: 20px;
+  width: 900px;
+}
+}
 .menu{
+  display: flex;
+  flex-wrap: wrap;
+}
+.afmenu{
   display: flex;
 }
 .afimage{
@@ -1263,6 +1350,17 @@ export default {
 }
 .afdesc{
   padding-top: 10px;
+  padding-bottom: 10px;
+}
+.afinfo{
+  padding: 1px;
+  margin-top: 8px;
+  padding-left: 5px;
+  background: rgb(233, 230, 226);
+}
+
+.searchbar{
+  width: 200px;
 }
 
 
@@ -1299,4 +1397,16 @@ export default {
 .links {
   padding-top: 15px;
 }
+
+#top_btn
+{
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  border-radius: 6px;
+  background-color: rgba(85, 82, 79, 0.8);
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 </style>
