@@ -49,7 +49,7 @@
 
       <div v-for="(item) in items" :key="item.id">
         <div class="afmenu">
-        <div :class="`afimage${item.enchant}`"><img class="img" :src="require(`@/assets/image/artifact/${item.acronym}.png`)" width='40'></div>
+        <div :class="`afimage${item.enchant}`"><img class="img" :src="`${artimages[item.acronym]}`" width='40'></div>
         <div class="afname">
           <b>
             <div v-if="en"> {{ item.name }} </div>
@@ -1266,6 +1266,7 @@ export default {
          "description": "BOSSの制限時間増加（最大+60秒）"
        }
       ],
+      artimages:[],
       items: [
 
       ],     
@@ -1286,11 +1287,10 @@ export default {
       }
     },
     selected_tier: function(){
-      this.cookie_set_af()
       this.art_set()
     },
     selected_pool: function(){
-      this.cookie_set_af()
+      this.firebase_image()
       this.art_set()
     },
   },
@@ -1307,16 +1307,13 @@ export default {
   },
   created() {
     this.art_set()
-    //if (this.$cookies.get('cookie_set_af') != null){
-　　//　var parse = JSON.parse(this.$cookies.get('cookie_set_af'))
-    //  console.log(parse.selected_pool)
-    //　this.selected_lang = parse.selected_lang
-    //　this.selected_pool = parse.selected_pool
-    //　this.selected_tier = parse.selected_tier
-    //}
-  },
-  mounted() {
-    this.art_set()
+    var images = {}
+    for (let index = 0; index < this.artifacts.length; index++) {
+      var name_set = this.artifacts[index].acronym
+      var url = "https://firebasestorage.googleapis.com/v0/b/tt2tools.appspot.com/o/artifact%2F" + this.artifacts[index].acronym +".png?alt=media&token=08de3603-abc0-4a74-b420-770d309aca88"
+      images[name_set] = url
+    }
+    this.artimages = images
   },
 }
 </script>

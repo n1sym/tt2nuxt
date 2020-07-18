@@ -8,7 +8,8 @@
         <b-dropdown-item to="/convert">ログ変換</b-dropdown-item>
       </b-nav-item-dropdown>
       <b-nav-item-dropdown text="Pages" right>
-        <b-dropdown-item to="/page/artifact">アーティファクト解説</b-dropdown-item>
+        <b-dropdown-item to="/page/artifact">アーティファクト一覧</b-dropdown-item>
+        <b-dropdown-item to="/page/card">レイドカード一覧</b-dropdown-item>
         <b-dropdown-item to="/updates/devupdate">アップデート情報</b-dropdown-item>
       </b-nav-item-dropdown>
       <b-nav-item to="/history"><b-icon icon="file-text"></b-icon> 更新履歴 </b-nav-item>

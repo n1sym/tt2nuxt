@@ -10,6 +10,11 @@
         >アーティファクト一覧・解説 <b-icon icon="link45deg"></b-icon></nuxt-link>
       </li>
       <li>
+        <nuxt-link to="/page/card"
+        class="button--grey2"
+        >レイドカード一覧・解説 <b-icon icon="link45deg"></b-icon></nuxt-link>
+      </li>
+      <li>
         <nuxt-link to="/updates/devupdate"
         class="button--grey2"
         >アップデート情報まとめ <b-icon icon="link45deg"></b-icon></nuxt-link>

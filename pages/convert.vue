@@ -28,7 +28,7 @@
     <b-collapse id="collapse-1" class="mt-2">
 
         <p><b>:禁止部位の設定</b></p>
-        <img class="img" :src="require(`@/assets/image/titanexample.png`)" width='280'><br><br>
+        <img class="img" src="https://firebasestorage.googleapis.com/v0/b/tt2tools.appspot.com/o/titanexample.png?alt=media&token=05d305c3-2075-40a4-84a0-59dc2bd4f352" width='280'><br><br>
         <div class="parts-table">
          <b-table small striped hover :items="check_items" :fields="parts_fields">
            <template v-slot:cell(titan)="row">
