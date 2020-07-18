@@ -1290,7 +1290,6 @@ export default {
       this.art_set()
     },
     selected_pool: function(){
-      this.firebase_image()
       this.art_set()
     },
   },
