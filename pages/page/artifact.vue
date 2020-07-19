@@ -39,7 +39,7 @@
         name="flavour-1"
       ></b-form-checkbox-group> 
       </b-form-group>
-      
+      <b-form-checkbox v-model="enchant" inline>enchant</b-form-checkbox>
 
       
       
@@ -80,6 +80,7 @@ export default {
       text: "",
       ja: false,
       enja: false,
+      enchant: false,
       selected_lang: 'en',
       options_lang: [
         { text: '英語', value: 'en' },
@@ -526,7 +527,7 @@ export default {
          "name": "Corrupted Rune Heart",
          "name_jp": "破損したルーンハート",
          "acronym": "CRH",
-         "tier": 3,
+         "tier": 2,
          "pool": 2,
          "match": "All",
          "enchant": "",
@@ -601,7 +602,7 @@ export default {
          "tier": 2,
          "pool": 3,
          "match": "Pet,SC,CS",
-         "enchant": "",
+         "enchant": "1",
          "maxlevel": "",
          "description": "Deadly Strike（致命的な一撃）, Inactive Gold 倍率が増加する。"
        },
@@ -1114,7 +1115,7 @@ export default {
          "name": "Lucky Foot of Al-Mi-Raj",
          "name_jp": "アルミラージのラッキー足",
          "acronym": "LFoA",
-         "tier": 1,
+         "tier": 0,
          "pool": 3,
          "match": "All",
          "enchant": "",
@@ -1290,6 +1291,9 @@ export default {
       this.art_set()
     },
     selected_pool: function(){
+      this.art_set()
+    },
+    enchant: function(){
       this.art_set()
     },
   },

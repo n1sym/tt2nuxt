@@ -23,6 +23,9 @@ Vue.mixin({
       if(this.selected_pool.includes(art.pool) == false){
         return false
       }
+      if(this.enchant == true && art.enchant == ""){
+        return false
+      }
       if(this.text != ""){
         if(art.name.toUpperCase().match(this.text.toUpperCase()) == null && art.name_jp.toUpperCase().match(this.text.toUpperCase()) == null){
           return false

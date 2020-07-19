@@ -5,6 +5,9 @@
       <p>ご意見ご要望あれば、<a href="https://forms.gle/rPgeWz2KmLrBpqv7A" target="_blank">Googleフォーム</a>までお願いします。</p>
       <ul>
       <li id="upd">
+        AF一覧・解説ページを更新。エンチャント済みのみ表示と、tier表記をゲーム内準拠に変更。<br>(2020-07-19)
+      </li>
+      <li id="upd">
         v3.12に対応したスキルツリー一覧・解説ページを作成。レベルテーブル情報などの詳細情報も確認可能。<br>(2020-07-19)
       </li>
       <li id="upd">

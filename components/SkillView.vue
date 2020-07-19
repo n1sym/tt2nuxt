@@ -4,7 +4,7 @@
     <div class="afimage"><img class="img" :src="`${images[item.Acr]}`" width='50'></div>
     <div class="afname"> <b>{{item.Name}} / {{item.Name_jp}}</b> <br>
     <b-badge :variant="skill_type">Tier {{item.Tier}}</b-badge>
-    <b-badge :variant="skill_type">Max {{item.MaxLevel}}</b-badge>
+    <b-badge :variant="skill_type">Max {{maxlevel_view}}</b-badge>
     </div>
   </div>
   <div class="afdescs"> {{item.Note_jp}} </div>
@@ -59,15 +59,22 @@ export default {
           return "warning"
         case "Rogue":
           return "success"    
-
       }
-      
-    }
+    },
+    maxlevel_view(){
+      switch(this.item.TierNum){
+        case 4:
+          return (String(this.item.MaxLevel) + "(+1)")   
+      }
+      return this.item.MaxLevel
+    },
 
   },
   created() {
+    
     var skill_info = []
     var n = this.item.MaxLevel
+    if(this.item.TierNum == 4){n += 1}
     for (let index = 0; index < n; index++) {
        var a = "A" + String(index+1)
        var b = "B" + String(index+1)
