@@ -41,6 +41,7 @@ export default {
       src: '@/plugins/vue-chartjs',
       ssr: false,
     },
+    '@/plugins/vue-scrollto',
   ],
   /*
   ** Auto import components
