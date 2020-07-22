@@ -2,6 +2,7 @@
   <div class="container">
     <div>
       <b>: TapTitans2 装備セットガイド</b><br><br>
+      <p>工事中です。</p>
       <p>なにかありましたら <a href="https://forms.gle/rPgeWz2KmLrBpqv7A" target="_blank">Googleフォーム</a> まで</p>
       <p> 2020/07/20：v3.12 対応</p>
       <blockquote>
@@ -9,7 +10,6 @@
       </blockquote>
       <hr>
       <h5>## はじめに</h5>
-      <p>
         <ul class="upd">
           <li>
             Mythic【神話】セットはLegendary【レジェンド】セットよりも強力です。セットを揃えるのは困難ですが、後半の進行度を重視したいならば、
@@ -28,7 +28,6 @@
             装備は進行するたびに変えていくものですが、装備セット効果は永続です。
           </li>
         </ul>
-      </p>
       <br>
       <h5>## 目次</h5>
       <ul>

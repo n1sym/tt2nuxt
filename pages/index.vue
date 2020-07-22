@@ -20,6 +20,11 @@
         >スキルツリー一覧・解説 <b-icon icon="link45deg"></b-icon></nuxt-link>
       </li>
       <li>
+        <nuxt-link to="/guides"
+        class="button--grey2"
+        >レミング氏によるTT2ガイド翻訳まとめ <b-icon icon="link45deg"></b-icon></nuxt-link>
+      </li>
+      <li>
         <nuxt-link to="/updates/devupdate"
         class="button--grey2"
         >アップデート情報まとめ <b-icon icon="link45deg"></b-icon></nuxt-link>
