@@ -4,6 +4,68 @@
       <b>: TapTitans2 最新アップデート情報</b><br><br>
       <p>なにかありましたら <a href="https://forms.gle/rPgeWz2KmLrBpqv7A" target="_blank">Googleフォーム</a> まで</p>
       <p> 2020/07/17：更新 </p>
+
+      <h4><a href="https://www.reddit.com/r/TapTitans2/comments/idx15u/devlog_66_v313_patch_notes/" 
+         target="_blank"># DevLog #66: v3.13 Patch Notes!</a></h4>
+      <b-badge variant="secondary" class="badge">2020/08/21</b-badge>
+      <ul class="upd">
+        <li>
+           アップデートは8/25を予定
+        </li>
+        <li>
+          ペットクエストの仕様変更
+        </li>
+        <ul>
+        <li>
+          クエストに行かせることでペット経験値を得て、ペットのレベルを上げることができる
+        </li>
+        <li>
+          クエストの枠を6→4に変更
+        </li>
+        <li>
+          （クエスト内での）ペットの強化
+        </li>
+        </ul>
+        
+        <li>
+          クランレイド：tier3-30 以降のステージを追加
+        </li>
+        <li>
+          ステージキャップ更新：98k → 100k
+        </li>
+        <li>
+          エンチャント追加：
+        </li>
+        <ul>
+          <li>Influential Elixir : 影響力のあるエリクサー</li>
+          <li>Chest of Contentment : 充足の宝箱</li>
+          <li>Heroic Shield : 英雄の盾</li>
+        </ul>
+        <li>
+          レジェンド装備セット追加：Beast Rancher
+        </li>
+        <li>
+          Firestoneイベント開催（いつもの石集めるやつです）
+        </li>
+        <li>
+          ソロレイド：
+        </li>
+        <ul>
+          <li>デッキのバランス調整</li>
+          <li>ポータル画面に計測タイマーを表示（リーダーボードに表示される時間）</li>
+          <li>報酬の一括受け取りボタン追加</li>
+        </ul>
+        <li>
+          スキルツリー変更パネルに"Undo（一つ戻る）"ボタン追加
+        </li>
+        <li>
+          プレイヤー情報をexportするボタンを設定パネルに追加
+        </li>
+        <li>
+          アフリクションとフェアリートーテムが鎧破壊→ボディ露出のタイミングでもスタックが継続されるよう変更
+        </li>
+      </ul><br>
+
       <h4><a href="https://www.reddit.com/r/TapTitans2/comments/hsvywv/devupdate_19_prepare_the_portals/" 
          target="_blank"># DevUpdate #19: Prepare the Portals</a></h4>
       <b-badge variant="secondary" class="badge">2020/07/17</b-badge>
