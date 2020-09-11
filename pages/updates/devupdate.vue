@@ -3,7 +3,7 @@
     <div>
       <b>: TapTitans2 最新アップデート情報</b><br><br>
       <p>なにかありましたら <a href="https://forms.gle/rPgeWz2KmLrBpqv7A" target="_blank">Googleフォーム</a> まで</p>
-      <p> 2020/07/17：更新 </p>
+      <p> 2020/08/22：更新 </p>
 
       <h4><a href="https://www.reddit.com/r/TapTitans2/comments/idx15u/devlog_66_v313_patch_notes/" 
          target="_blank"># DevLog #66: v3.13 Patch Notes!</a></h4>

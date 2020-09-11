@@ -4,6 +4,9 @@
       <b>: 更新履歴</b><br><br>
       <p>ご意見ご要望あれば、<a href="https://forms.gle/rPgeWz2KmLrBpqv7A" target="_blank">Googleフォーム</a>までお願いします。</p>
       <ul>
+        <li id="upd">
+        アプデ情報ページを更新。<br>(2020-08-22)
+      </li>
       <li id="upd">
         装備セットガイド翻訳ページを作成。<br>(2020-07-22)
       </li>

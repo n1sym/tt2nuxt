@@ -34,6 +34,11 @@
         class="button--grey2"
         >レイドログ変換くん <b-icon icon="link45deg"></b-icon></nuxt-link>
       </li>
+      <li>
+        <nuxt-link to="/optimiser"
+        class="button--grey2"
+        >optimiser <b-icon icon="link45deg"></b-icon></nuxt-link>
+      </li>
       
       </ul>
     </div>
