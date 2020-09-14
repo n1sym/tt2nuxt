@@ -6,6 +6,7 @@
       
       <b-nav-item-dropdown text="Tools" right>
         <b-dropdown-item to="/convert">ログ変換</b-dropdown-item>
+        <b-dropdown-item to="/optimiser">AFオプティ</b-dropdown-item>
       </b-nav-item-dropdown>
       <b-nav-item-dropdown text="Pages" right>
         <b-dropdown-item to="/page/artifact">アーティファクト一覧</b-dropdown-item>

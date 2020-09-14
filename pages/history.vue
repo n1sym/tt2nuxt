@@ -4,7 +4,10 @@
       <b>: 更新履歴</b><br><br>
       <p>ご意見ご要望あれば、<a href="https://forms.gle/rPgeWz2KmLrBpqv7A" target="_blank">Googleフォーム</a>までお願いします。</p>
       <ul>
-        <li id="upd">
+      <li id="upd">
+        AFオプティマイザーv1を制作。レイドログ変換にクラン平均ダメージの表示機能を追加。<br>(2020-09-12)
+      </li>
+      <li id="upd">
         アプデ情報ページを更新。<br>(2020-08-22)
       </li>
       <li id="upd">

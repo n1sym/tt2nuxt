@@ -110,6 +110,11 @@
      <b-form-checkbox v-model="leg_open" inline>Leg</b-form-checkbox>
      <b-form-checkbox v-model="detail_open" inline>Detail</b-form-checkbox>
     <br><br>
+    <div v-if="clanave">
+      <p> クラン平均ダメージ：{{ clan_ave_damage}}</p>
+     
+    </div>
+    
     <b-table :striped="striped" 
              hover 
              :items="items" 
@@ -225,6 +230,7 @@ export default {
       invalid_damage_total: 0,
       invalid_damage_total_view: 0,
       sortDesc: false,
+      clan_ave: false,
       open: false,
       striped: true,
       ave_open: false,
@@ -474,6 +480,7 @@ export default {
         this.clan_total_damage = clan_total_damage
         this.invalid_detect()
         this.tabIndex = 1
+        this.clanave = true
         console.log("リザルト処理です")
         
         return

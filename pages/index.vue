@@ -3,6 +3,7 @@
     <div>
       TapTitans2 の攻略・便利ツールなど<br><br>
       <p>ご意見ご要望あれば、<a href="https://forms.gle/rPgeWz2KmLrBpqv7A" target="_blank">Googleフォーム</a>までお願いします。</p>
+      <p>アマテラス（4kp9n）メンバー募集中です <b-icon icon="flag-fill" font-scale="1"></b-icon></p>
       <ul>
       <li>
         <nuxt-link to="/page/artifact"
@@ -37,7 +38,7 @@
       <li>
         <nuxt-link to="/optimiser"
         class="button--grey2"
-        >optimiser <b-icon icon="link45deg"></b-icon></nuxt-link>
+        >AFオプティマイザー <b-icon icon="link45deg"></b-icon></nuxt-link>
       </li>
       
       </ul>
